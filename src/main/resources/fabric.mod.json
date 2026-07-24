@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "pulsepvp",
+  "version": "1.0.0",
+  "name": "PulsePvP HUD",
+  "description": "Информационный HUD для PvP: индикатор крита/кулдауна, пульс HP/брони цели, таймеры эффектов.",
+  "authors": ["you"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/pulsepvp/icon.png",
+  "environment": "client",
+  "mixins": [
+    "pulsepvp.mixins.json"
+  ],
+  "entrypoints": {
+    "client": [
+      "com.example.pvphud.PulsePvpClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
