@@ -87,8 +87,8 @@ public final class CombatTracker {
 
     public static double distanceToTarget(MinecraftClient client, LivingEntity target) {
         if (client.player == null) return -1;
-        Vec3d a = client.player.getPos();
-        Vec3d b = target.getPos();
+        Vec3d a = client.player.getEntityPos();
+        Vec3d b = target.getEntityPos();
         return a.distanceTo(b);
     }
 }

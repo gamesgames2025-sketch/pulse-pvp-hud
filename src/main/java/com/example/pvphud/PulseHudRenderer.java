@@ -54,7 +54,7 @@ public final class PulseHudRenderer {
             // лёгкая пульсирующая рамка вокруг, когда крит готов
             int glow = (int) (CombatTracker.getPulseValue() * 255);
             int glowColor = (glow << 24) | 0xFFFFFF;
-            ctx.drawBorder(x - 1, y - 1, barW + 2, barH + 2, glowColor);
+            outlineRect(ctx, x - 1, y - 1, barW + 2, barH + 2, glowColor);
         }
     }
 
@@ -92,7 +92,7 @@ public final class PulseHudRenderer {
         ctx.fill(x, armorBarY, x + barW, armorBarY + 2, 0x60000000);
         ctx.fill(x, armorBarY, x + armorW, armorBarY + 2, withAlpha(0xFFB0B0B0, 220));
 
-        ctx.drawBorder(x - 1, y - 1, barW + 2, barH + 2, withAlpha(0xFFFFFFFF, lowHp ? 120 + alphaBoost : 60));
+        outlineRect(ctx, x - 1, y - 1, barW + 2, barH + 2, withAlpha(0xFFFFFFFF, lowHp ? 120 + alphaBoost : 60));
     }
 
     // ---------- 3. Таймеры эффектов зелий у цели ----------
@@ -112,7 +112,7 @@ public final class PulseHudRenderer {
             // цветной квадрат-плашка вместо текстуры эффекта (не зависит от ресурспака)
             int color = effectColor(effect);
             ctx.fill(x, y, x + 18, y + 18, withAlpha(color, 200));
-            ctx.drawBorder(x, y, 18, 18, 0x80000000);
+            outlineRect(ctx, x, y, 18, 18, 0x80000000);
 
             String label = secondsLeft >= 60 ? (secondsLeft / 60) + "m" : secondsLeft + "s";
             ctx.drawCenteredTextWithShadow(client.textRenderer, label, x + 9, y + 20, 0xFFFFFFFF);
@@ -130,6 +130,17 @@ public final class PulseHudRenderer {
         int g = (int) MathHelper.lerp(t, g1, g2);
         int b = (int) MathHelper.lerp(t, b1, b2);
         return (a << 24) | (r << 16) | (g << 8) | b;
+    }
+
+    /**
+     * Рисует рамку толщиной 1px вручную через fill() — не зависит от того,
+     * как в конкретной версии Minecraft называется/выглядит метод drawBorder.
+     */
+    private static void outlineRect(DrawContext ctx, int x, int y, int width, int height, int color) {
+        ctx.fill(x, y, x + width, y + 1, color);                  // верх
+        ctx.fill(x, y + height - 1, x + width, y + height, color); // низ
+        ctx.fill(x, y, x + 1, y + height, color);                  // лево
+        ctx.fill(x + width - 1, y, x + width, y + height, color);  // право
     }
 
     private static int withAlpha(int argb, int alpha) {
